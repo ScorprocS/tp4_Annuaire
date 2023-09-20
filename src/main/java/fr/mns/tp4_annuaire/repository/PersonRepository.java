@@ -1,26 +1,27 @@
 package fr.mns.tp4_annuaire.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.EntityGraph.EntityGraphType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import fr.mns.tp4_annuaire.model.Gender;
 import fr.mns.tp4_annuaire.model.Person;
 
-public interface PersonRepository extends JpaRepository<Person, Long>,PersonRepositoryCustom{
-	 @EntityGraph(value="Person.address",type = EntityGraphType.LOAD)
-     Person findOneWithAddressById(@Param("id") Long id);
-	 
-	 @EntityGraph(value="Person.address")
-	 Person findOneWithAddressByLastName(@Param("lastName") String lastName);
+public interface PersonRepository extends JpaRepository<Person, Long>, PersonRepositoryCustom {
+	@EntityGraph(value = "Person.address", type = EntityGraphType.LOAD)
+	Person findOneWithAddressById(@Param("id") Long id);
+
+	@EntityGraph(value = "Person.address")
+	Person findOneWithAddressByLastName(@Param("lastName") String lastName);
 
 	@Query("select p from Person p left join fetch p.address where p.id =:id")
-	 Person findOneWithAddressByIdJpql(@Param("id") Long id);
-	
-	//Person findByFirstName(String firstname);
+	Person findOneWithAddressByIdJpql(@Param("id") Long id);
+
+	List<Person> findAllByGender(Gender gender);
+	List<Person> findAllByAddressCityName(String city);
+	// Person findByFirstName(String firstname);
 }
-
-
-
-

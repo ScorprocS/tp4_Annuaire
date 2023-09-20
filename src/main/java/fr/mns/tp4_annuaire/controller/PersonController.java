@@ -13,15 +13,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 import fr.mns.tp4_annuaire.model.Person;
 import fr.mns.tp4_annuaire.repository.PersonRepository;
-import jakarta.websocket.server.PathParam;
 
 @Controller
 @RequestMapping("/persons")
 public class PersonController {
-	
+
 	private final PersonRepository repository;
 
-	public PersonController( PersonRepository repository ) {
+	public PersonController(PersonRepository repository) {
 		this.repository = repository;
 	}
 
@@ -29,6 +28,13 @@ public class PersonController {
 	public ModelAndView getPersons() {
 		ModelAndView mv = new ModelAndView("persons");
 		mv.addObject("persons", repository.findAll());
+		return mv;
+	}
+
+	@GetMapping("/search")
+	public ModelAndView getPersons(String cityName) {
+		ModelAndView mv = new ModelAndView("persons");
+		mv.addObject("persons", repository.findAllByAddressCityName(cityName));
 		return mv;
 	}
 
@@ -45,30 +51,31 @@ public class PersonController {
 		return getPersons();
 
 	}
+
 	@GetMapping("/addPerson")
 	public ModelAndView createPersonForm() {
-		ModelAndView mv=new ModelAndView("personForm");
+		ModelAndView mv = new ModelAndView("personForm");
 		mv.addObject("person", new Person());
 		return mv;
-		
+
 	}
-	
+
 	@PostMapping("/addPerson")
 	public String savePerson(@ModelAttribute("personForm") Person person) {
 		person.setId(null);
 		person.setBirthDate(LocalDate.now());
 		repository.save(person);
-		
+
 		return "redirect:/persons";
-		
+
 	}
-	
+
 	@GetMapping("/delete/{id}")
 	public String deletePerson(@PathVariable("id") Long id) {
 		repository.deleteById(id);
-		
+
 		return "redirect:/persons";
-		
+
 	}
 
 }
