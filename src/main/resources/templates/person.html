@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+   <head>
+      <meta charset="UTF-8" />
+      <title>Person </title>
+      <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+   </head>
+   <body>
+      <h1>Person </h1>
+     
+      <br/><br/>
+      <div>
+         <p th:utext="${person.firstName}"></p>
+         <p th:utext="${person.lastName}"></p>
+
+      </div>
+   </body>
+</html>
+ 
